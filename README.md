@@ -1,12 +1,12 @@
 # Energy Efficiency Predictor
 
-A full-stack machine learning web application that predicts the **Heating Load** and **Cooling Load** of residential buildings based on 8 architectural parameters. Built with a trained Random Forest model, a Flask REST API backend, and a premium dark-mode dashboard frontend.
+A full-stack machine learning web app that predicts the heating load and cooling load of residential buildings based on 8 architectural parameters. The model is a trained Random Forest, served through a Flask REST API, with a dark-mode frontend dashboard.
 
 ---
 
-## 📊 Dataset
+## Dataset
 
-The model was trained on the **UCI Energy Efficiency Dataset** (`ENB2012_data.xlsx`), which contains 768 building samples described by 8 features:
+The model was trained on the UCI Energy Efficiency Dataset (`ENB2012_data.xlsx`), which has 768 building samples described by 8 features:
 
 | Feature | Unit | Description |
 |---|---|---|
@@ -23,7 +23,7 @@ The model was trained on the **UCI Energy Efficiency Dataset** (`ENB2012_data.xl
 
 ---
 
-## 🤖 Model Performance
+## Model Performance
 
 | Metric | Score |
 |---|---|
@@ -33,7 +33,7 @@ The model was trained on the **UCI Energy Efficiency Dataset** (`ENB2012_data.xl
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 Energy Efficiency project/
@@ -50,7 +50,7 @@ Energy Efficiency project/
 
 ---
 
-## 🚀 Local Setup
+## Local Setup
 
 ### 1. Clone the repository
 ```bash
@@ -67,18 +67,18 @@ pip install -r requirements.txt
 ```bash
 python app.py
 ```
-The server will start at `http://127.0.0.1:5000`
+The server runs at `http://127.0.0.1:5000`
 
 ### 4. Open the Dashboard
 In a new terminal window:
 ```bash
 open index.html
 ```
-Or drag `index.html` into your browser.
+Or just drag `index.html` into your browser.
 
 ---
 
-## 📡 API Reference
+## API Reference
 
 ### `POST /predict`
 
@@ -106,7 +106,7 @@ Or drag `index.html` into your browser.
 
 ---
 
-## 🎨 Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |---|---|
