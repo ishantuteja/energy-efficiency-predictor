@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Midnight Luxury Energy Efficiency Dashboard — predict heating and cooling loads using a trained machine learning model.">
+    <title>Energy Efficiency · Dashboard</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ── Animated Orbs ── -->
+    <div class="orb-scene" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="orb orb-4"></div>
+    </div>
+
+    <div class="page-wrapper">
+
+        <!-- ── Header ── -->
+        <header class="page-header">
+            <div class="header-eyebrow">ML-Powered Dashboard</div>
+            <h1>Energy <em>Efficiency</em></h1>
+            <p class="page-subtitle">Enter your building's parameters to predict<br>heating and cooling load requirements.</p>
+            <div class="accuracy-badge">
+                <span class="badge-dot"></span>
+                Model Accuracy &mdash; 98% R² Score
+            </div>
+        </header>
+
+        <!-- ── Main Card ── -->
+        <main>
+            <div class="glass-card">
+
+                <p class="section-label">Building Parameters</p>
+
+                <form id="prediction-form" novalidate>
+                    <div class="form-grid">
+
+                        <div class="input-group">
+                            <label for="relative_compactness">
+                                <span class="label-name">Relative Compactness</span>
+                                <span class="label-unit">Ratio</span>
+                            </label>
+                            <input type="number" id="relative_compactness" step="0.01" min="0" max="1" placeholder="e.g. 0.74" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="surface_area">
+                                <span class="label-name">Surface Area</span>
+                                <span class="label-unit">m²</span>
+                            </label>
+                            <input type="number" id="surface_area" step="0.01" min="0" placeholder="e.g. 686.0" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="wall_area">
+                                <span class="label-name">Wall Area</span>
+                                <span class="label-unit">m²</span>
+                            </label>
+                            <input type="number" id="wall_area" step="0.01" min="0" placeholder="e.g. 245.0" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="roof_area">
+                                <span class="label-name">Roof Area</span>
+                                <span class="label-unit">m²</span>
+                            </label>
+                            <input type="number" id="roof_area" step="0.01" min="0" placeholder="e.g. 220.5" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="overall_height">
+                                <span class="label-name">Overall Height</span>
+                                <span class="label-unit">m</span>
+                            </label>
+                            <input type="number" id="overall_height" step="0.01" min="0" placeholder="e.g. 3.5" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="orientation">
+                                <span class="label-name">Orientation</span>
+                                <span class="label-unit">Direction</span>
+                            </label>
+                            <select id="orientation" required>
+                                <option value="" disabled selected>Select orientation…</option>
+                                <option value="2">North</option>
+                                <option value="3">East</option>
+                                <option value="4">South</option>
+                                <option value="5">West</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="glazing_area">
+                                <span class="label-name">Glazing Area</span>
+                                <span class="label-unit">Ratio</span>
+                            </label>
+                            <input type="number" id="glazing_area" step="0.01" min="0" max="1" placeholder="e.g. 0.25" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="glazing_area_distribution">
+                                <span class="label-name">Glazing Area Dist</span>
+                                <span class="label-unit">Class (0–5)</span>
+                            </label>
+                            <input type="number" id="glazing_area_distribution" step="1" min="0" max="5" placeholder="e.g. 3" required>
+                        </div>
+
+                    </div>
+
+                    <div class="submit-section">
+                        <button type="submit" id="submit-btn">
+                            <span class="spinner"></span>
+                            <span class="btn-text">Predict Efficiency</span>
+                        </button>
+                        <div id="error-msg" class="error-message" role="alert"></div>
+                    </div>
+                </form>
+
+                <!-- ── Prediction Results ── -->
+                <div id="results" class="results-container" aria-live="polite">
+                    <div class="results-divider">
+                        <span class="results-divider-label">Prediction Results</span>
+                    </div>
+                    <div class="results-grid">
+                        <div class="result-card heat">
+                            <span class="result-icon">🔥</span>
+                            <div class="result-label">Heating Load</div>
+                            <div class="result-value" id="heating-result">—</div>
+                            <div class="result-unit">kWh / m²</div>
+                        </div>
+                        <div class="result-card cool">
+                            <span class="result-icon">❄️</span>
+                            <div class="result-label">Cooling Load</div>
+                            <div class="result-value" id="cooling-result">—</div>
+                            <div class="result-unit">kWh / m²</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ── Feature Importance Chart ── -->
+            <section class="chart-section" aria-label="Feature Importance">
+                <div class="chart-card">
+                    <div class="chart-title">Feature Importance</div>
+                    <div class="chart-subtitle">Relative contribution of each input variable to the model's predictions</div>
+                    <div class="chart-wrapper">
+                        <canvas id="featureChart" aria-label="Feature importance horizontal bar chart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- App Logic -->
+    <script src="app.js"></script>
+
+</body>
+</html>
